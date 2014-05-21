@@ -8,7 +8,7 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(__dirname + "/.."));
-  app.use(express.errorHandler()); 
+  app.use(express.errorHandler());
 });
 
 // Routes
@@ -21,9 +21,9 @@ app.get( '/tests/js/*', function( req, res ) {
 	// No cache
 	if ( ~ url.indexOf("no-cache")) {
 		date = (new Date( (+new Date() - 2000000) )).toUTCString();
-		res.setHeader("Last-Modified", date); 
-		res.setHeader("Expires", date); 
-		res.setHeader("Pragma", "no-cache"); 
+		res.setHeader("Last-Modified", date);
+		res.setHeader("Expires", date);
+		res.setHeader("Pragma", "no-cache");
 	} else {
 		res.setHeader("Expires", "Thu, 31 Dec 2020 20:00:00 GMT");
 	}
@@ -51,8 +51,8 @@ app.get( '/tests/css/*', function( req, res ) {
 	var url = req.url,
 			date, sleep, basename;
 
-	res.setHeader("Content-Type", "text/css"); 
-	res.setHeader("Expires", "Thu, 31 Dec 2020 20:00:00 GMT"); 
+	res.setHeader("Content-Type", "text/css");
+	res.setHeader("Expires", "Thu, 31 Dec 2020 20:00:00 GMT");
 
 	// Sleep to simulate a slow loading server
 	sleep = /\/sleep-(\d+)\//.exec( url );
@@ -72,4 +72,25 @@ app.get( '/tests/css/*', function( req, res ) {
 
 app.listen(3000);
 console.log("Launching yepnope.js unit tests...");
-exec("open http://localhost:3000/tests/index.html");
+//exec("open http://localhost:3000/tests/index.html");
+
+
+var qunit = require('qunit');
+
+qunit.run({
+    code: {
+
+        // Include the source code
+        path: '../yepnope.js',
+
+        // What global var should it introduce for your tests?
+        namespace: 'yepnope'
+
+    },
+    tests: [
+
+        // Include the test suite(s)
+        './tests.js'
+
+    ]
+});
